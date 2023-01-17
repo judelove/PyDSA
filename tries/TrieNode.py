@@ -8,7 +8,8 @@ class TrieNode:
     def add_word(self, word):
         if len(word) < 1:
             raise Exception("Empty word supplied")
-        self.__nodes[word[0:1]] = TrieNode()
+        if word[0:1] not in self.__nodes:
+            self.__nodes[word[0:1]] = TrieNode()
         if len(word) > 1:
             self.__nodes[word[0:1]].add_word(word[1:])
         else:
@@ -27,6 +28,16 @@ class TrieNode:
     @terminates_word.setter
     def terminates_word(self, value):
         self.__terminates_word = value
+
+    @property
+    def size(self):
+        words_here = 0
+        if self.__terminates_word:
+            words_here = 1
+        for n in self.__nodes:
+            words_here = words_here + self.__nodes[n].size
+        return words_here
+
 
 
 
